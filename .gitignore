@@ -1,0 +1,19 @@
+# Archivos de salida de Maven
+**/target/
+*.class
+
+# Configuraciones de Eclipse IDE
+**/.classpath
+**/.project
+**/.settings/
+
+# Configuraciones de otros IDEs (IntelliJ / NetBeans)
+**/.idea/
+*.iml
+**/nbproject/private/
+**/build/
+**/dist/
+
+# Logs del sistema
+*.log
+.DS_Store
