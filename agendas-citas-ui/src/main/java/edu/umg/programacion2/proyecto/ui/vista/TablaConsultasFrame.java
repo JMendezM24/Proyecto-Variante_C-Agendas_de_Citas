@@ -61,10 +61,14 @@ public class TablaConsultasFrame extends JFrame {
 
         JButton btnModificar = EstiloUtil.crearBotonRedondeado("Modificar Cita", EstiloUtil.COLOR_PRIMARIO, Color.WHITE);
         JButton btnCambiarEstado = EstiloUtil.crearBotonRedondeado("Cambiar Estado", EstiloUtil.COLOR_EXITO, Color.WHITE);
+        // Botón para consultar el conteo por categoría (Map)
+        JButton btnResumenMotivos = EstiloUtil.crearBotonRedondeado("Resumen por Motivo", EstiloUtil.COLOR_PRIMARIO, Color.WHITE);
         JButton btnRegresar = EstiloUtil.crearBotonRedondeado("Regresar al Menú", EstiloUtil.COLOR_NEUTRO, Color.WHITE);
+       
 
         btnModificar.addActionListener(e -> abrirEdicionCita());
         btnCambiarEstado.addActionListener(e -> cambiarEstadoCita());
+        btnResumenMotivos.addActionListener(e -> mostrarResumenMotivos()); // Listener del nuevo botón
         btnRegresar.addActionListener(e -> {
         	if (timerAutoRefresco != null) {
                 timerAutoRefresco.stop(); // Detener el temporizador al regresar al menú
@@ -72,10 +76,6 @@ public class TablaConsultasFrame extends JFrame {
             new BienvenidaFrame().setVisible(true);
             dispose();
         });
-
-     // Botón para consultar el conteo por categoría (Map)
-        JButton btnResumenMotivos = EstiloUtil.crearBotonRedondeado("Resumen por Motivo", EstiloUtil.COLOR_PRIMARIO, Color.WHITE);
-        btnResumenMotivos.addActionListener(e -> mostrarResumenMotivos());
 
         panelBotones.add(btnModificar);
         panelBotones.add(btnCambiarEstado);
