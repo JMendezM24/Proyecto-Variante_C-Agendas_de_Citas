@@ -31,7 +31,8 @@ public class TablaConsultasFrame extends JFrame {
         
         getContentPane().setBackground(EstiloUtil.COLOR_FONDO);
 
-        String[] columnas = {"ID", "Sala", "Paciente", "Fecha", "Horario", "Motivo", "Estado"};
+     // Arreglo con la nueva columna integrada
+        String[] columnas = {"ID", "Sala", "Paciente", "Fecha", "Horario", "Motivo", "Estado", "1ra Visita"};
         modeloTabla = new DefaultTableModel(columnas, 0) {
             private static final long serialVersionUID = 1L;
             @Override
@@ -72,8 +73,13 @@ public class TablaConsultasFrame extends JFrame {
             dispose();
         });
 
+     // Botón para consultar el conteo por categoría (Map)
+        JButton btnResumenMotivos = EstiloUtil.crearBotonRedondeado("Resumen por Motivo", EstiloUtil.COLOR_PRIMARIO, Color.WHITE);
+        btnResumenMotivos.addActionListener(e -> mostrarResumenMotivos());
+
         panelBotones.add(btnModificar);
         panelBotones.add(btnCambiarEstado);
+        panelBotones.add(btnResumenMotivos); // Agregado aquí
         panelBotones.add(btnRegresar);
 
         add(panelBotones, BorderLayout.SOUTH);
@@ -101,6 +107,8 @@ public class TablaConsultasFrame extends JFrame {
 
             for (Cita c : listaCitasActuales) {
                 String rangoHorario = String.format("%s - %s", c.getHoraInicio(), c.getHoraFin());
+                String primeraVisitaStr = c.isEsPrimeraVisita() ? "Sí" : "No";
+                
                 modeloTabla.addRow(new Object[]{
                         c.getId(),
                         "Sala " + c.getSala(),
@@ -108,7 +116,8 @@ public class TablaConsultasFrame extends JFrame {
                         c.getFechaCita(),
                         rangoHorario,
                         c.getMotivo(),
-                        c.getEstado()
+                        c.getEstado(),
+                        primeraVisitaStr
                 });
             }
         } catch (Exception e) {
@@ -176,7 +185,8 @@ public class TablaConsultasFrame extends JFrame {
                         nuevaHoraFin,
                         citaSeleccionada.getMotivo(),
                         citaSeleccionada.getEstado(),
-                        nuevaSala
+                        nuevaSala,
+                        citaSeleccionada.isEsPrimeraVisita()
                 );
 
                 if (citaDAO.actualizarCitaCompleta(citaEditada)) {
@@ -253,6 +263,34 @@ public class TablaConsultasFrame extends JFrame {
                 }
             }
             return c;
+        }
+    }
+    
+    private void mostrarResumenMotivos() {
+        try {
+            java.util.Map<String, Integer> conteoMap = citaDAO.obtenerConteoPorMotivo();
+
+            if (conteoMap.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No hay citas registradas para agrupar.", "Resumen Vacío", JOptionPane.INFORMATION_MESSAGE);
+                return;
+            }
+
+            StringBuilder sb = new StringBuilder("=== CANTIDAD DE CITAS POR MOTIVO ===\n\n");
+            for (java.util.Map.Entry<String, Integer> entry : conteoMap.entrySet()) {
+                sb.append("• ").append(entry.getKey()).append(": ").append(entry.getValue()).append(" cita(s)\n");
+            }
+
+            JTextArea textArea = new JTextArea(sb.toString());
+            textArea.setEditable(false);
+            textArea.setFont(new Font("Consolas", Font.PLAIN, 13));
+
+            JScrollPane scrollPane = new JScrollPane(textArea);
+            scrollPane.setPreferredSize(new Dimension(380, 220));
+
+            JOptionPane.showMessageDialog(this, scrollPane, "Resumen Estadístico por Categoría", JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al calcular el resumen: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 }
