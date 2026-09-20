@@ -12,8 +12,9 @@ public class Cita {
     private String motivo;
     private EstadoCita estado;
     private int sala;
+    private boolean esPrimeraVisita;
 
-    public Cita(int id, String nombrePaciente, LocalDate fechaCita, LocalTime horaInicio, LocalTime horaFin, String motivo, EstadoCita estado, int sala) {
+    public Cita(int id, String nombrePaciente, LocalDate fechaCita, LocalTime horaInicio, LocalTime horaFin, String motivo, EstadoCita estado, int sala, boolean esPrimeraVisita) {
         this.id = id;
         this.nombrePaciente = nombrePaciente;
         this.fechaCita = fechaCita;
@@ -22,10 +23,11 @@ public class Cita {
         this.motivo = motivo;
         this.estado = estado;
         this.sala = sala;
+        this.esPrimeraVisita = esPrimeraVisita;
     }
 
-    public Cita(String nombrePaciente, LocalDate fechaCita, LocalTime horaInicio, LocalTime horaFin, String motivo, EstadoCita estado, int sala) {
-        this(0, nombrePaciente, fechaCita, horaInicio, horaFin, motivo, estado, sala);
+    public Cita(String nombrePaciente, LocalDate fechaCita, LocalTime horaInicio, LocalTime horaFin, String motivo, EstadoCita estado, int sala, boolean esPrimeraVisita) {
+        this(0, nombrePaciente, fechaCita, horaInicio, horaFin, motivo, estado, sala, esPrimeraVisita);
     }
 
     // Getters y Setters
@@ -39,4 +41,6 @@ public class Cita {
     public EstadoCita getEstado() { return estado; }
     public void setEstado(EstadoCita estado) { this.estado = estado; }
     public int getSala() { return sala; }
+    public boolean isEsPrimeraVisita() { return esPrimeraVisita; }
+    public void setEsPrimeraVisita(boolean esPrimeraVisita) { this.esPrimeraVisita = esPrimeraVisita; }
 }
