@@ -9,11 +9,13 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 public class CitaDAO {
 
 	public boolean insertar(Cita cita) throws SQLException {
-        String sql = "INSERT INTO citas (nombre_paciente, fecha_cita, hora_cita, hora_fin, sala, motivo, estado) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO citas (nombre_paciente, fecha_cita, hora_cita, hora_fin, sala, motivo, estado, es_primera_visita) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection con = ConexionBD.obtenerConexion();
              PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -24,6 +26,7 @@ public class CitaDAO {
             ps.setInt(5, cita.getSala());
             ps.setString(6, cita.getMotivo());
             ps.setString(7, cita.getEstado().name());
+            ps.setBoolean(8, cita.isEsPrimeraVisita());
             
             return ps.executeUpdate() > 0;
         }
@@ -73,7 +76,8 @@ public class CitaDAO {
                         horaFinLocal,
                         rs.getString("motivo"),
                         EstadoCita.valueOf(rs.getString("estado")),
-                        rs.getInt("sala")
+                        rs.getInt("sala"),
+                        rs.getBoolean("es_primera_visita")
                 );
                 lista.add(c);
             }
@@ -119,7 +123,7 @@ public class CitaDAO {
     }
     
     public boolean actualizarCitaCompleta(Cita cita) throws SQLException {
-        String sql = "UPDATE citas SET fecha_cita = ?, hora_cita = ?, hora_fin = ?, sala = ?, motivo = ?, estado = ? WHERE id = ?";
+        String sql = "UPDATE citas SET fecha_cita = ?, hora_cita = ?, hora_fin = ?, sala = ?, motivo = ?, estado = ?, es_primera_visita = ? WHERE id = ?";
         try (Connection conn = ConexionBD.obtenerConexion();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setDate(1, Date.valueOf(cita.getFechaCita()));
@@ -128,7 +132,8 @@ public class CitaDAO {
             stmt.setInt(4, cita.getSala());
             stmt.setString(5, cita.getMotivo());
             stmt.setString(6, cita.getEstado().name());
-            stmt.setInt(7, cita.getId());
+            stmt.setBoolean(7, cita.isEsPrimeraVisita());
+            stmt.setInt(8, cita.getId());
             return stmt.executeUpdate() > 0;
         }
     }
@@ -143,6 +148,19 @@ public class CitaDAO {
 
             return ps.executeUpdate() > 0;
         }
+    }
+    
+ // Calcula la frecuencia de citas por motivo usando Map<String, Integer> recorriendo listarTodas()
+    public Map<String, Integer> obtenerConteoPorMotivo() throws SQLException {
+        List<Cita> citas = listarTodas();
+        Map<String, Integer> conteoMap = new HashMap<>();
+
+        for (Cita c : citas) {
+            String motivo = c.getMotivo();
+            conteoMap.put(motivo, conteoMap.getOrDefault(motivo, 0) + 1);
+        }
+
+        return conteoMap;
     }
 
     public boolean eliminar(int id) throws SQLException {
