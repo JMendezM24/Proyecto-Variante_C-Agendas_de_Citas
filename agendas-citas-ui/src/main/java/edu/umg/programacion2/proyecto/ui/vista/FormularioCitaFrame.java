@@ -23,6 +23,7 @@ public class FormularioCitaFrame extends JFrame {
     private JComboBox<Integer> comboSala;
     private JButton btnGuardar;
     private JButton btnCancelar;
+    private JCheckBox chkPrimeraVisita;
 
     private CitaDAO citaDAO = new CitaDAO();
 
@@ -43,8 +44,9 @@ public class FormularioCitaFrame extends JFrame {
     private void initComponents() {
         // Tarjeta contenedor usando EstiloUtil
         JPanel panelTarjeta = EstiloUtil.crearPanelTarjeta();
-        panelTarjeta.setLayout(new GridLayout(6, 2, 12, 14));
-
+     // Cambiar de GridLayout(6, 2, 12, 14) a GridLayout(7, 2, 12, 14)
+        panelTarjeta.setLayout(new GridLayout(7, 2, 12, 14));
+        
         Font fuenteBase = new Font("Segoe UI", Font.PLAIN, 13);
 
         // Paciente
@@ -115,6 +117,19 @@ public class FormularioCitaFrame extends JFrame {
         txtMotivo.setFont(fuenteBase);
         panelTarjeta.add(lblMotivo);
         panelTarjeta.add(txtMotivo);
+        
+     // Es Primera Visita
+        JLabel lblPrimeraVisita = new JLabel("¿Es Primera Visita?:");
+        lblPrimeraVisita.setFont(fuenteBase);
+        lblPrimeraVisita.setForeground(EstiloUtil.COLOR_TEXTO);
+        
+        chkPrimeraVisita = new JCheckBox("Sí, paciente de primera vez");
+        chkPrimeraVisita.setFont(fuenteBase);
+        chkPrimeraVisita.setOpaque(false);
+        chkPrimeraVisita.setForeground(EstiloUtil.COLOR_TEXTO);
+
+        panelTarjeta.add(lblPrimeraVisita);
+        panelTarjeta.add(chkPrimeraVisita);
 
         // Botones estilizados con EstiloUtil
         btnGuardar = EstiloUtil.crearBotonRedondeado("Guardar Cita", EstiloUtil.COLOR_EXITO, Color.WHITE);
@@ -183,8 +198,9 @@ public class FormularioCitaFrame extends JFrame {
                 }
             }
 
-            Cita nuevaCita = new Cita(paciente, fecha, horaInicio, horaFin, motivo, EstadoCita.PENDIENTE, sala);
-
+         // Reemplazar la línea de instanciación por esta:
+            Cita nuevaCita = new Cita(paciente, fecha, horaInicio, horaFin, motivo, EstadoCita.PENDIENTE, sala, chkPrimeraVisita.isSelected());
+            
             if (citaDAO.insertar(nuevaCita)) {
                 JOptionPane.showMessageDialog(this, "Cita agendada correctamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                 new BienvenidaFrame().setVisible(true);
