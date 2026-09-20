@@ -6,32 +6,6 @@ Aplicación de escritorio desarrollada en **Java Swing** con arquitectura multim
 
 ---
 
-## 🆕 Nuevas Funcionalidades
-
-### 1. Indicador de Primera Visita (Paciente Nuevo)
-- **Formulario de Registro:** Se integró un `JCheckBox` en `FormularioCitaFrame` que permite marcar si la consulta corresponde a un paciente de primera vez.
-- **Visualización en Tabla:** La vista `TablaConsultasFrame` incluye una nueva columna **"1ra Visita"** que refleja de forma directa (`Sí` / `No`) el tipo de consulta.
-- **Persistencia:** Mapeo completo en la capa DAO (`CitaDAO`) para guardar y actualizar la bandera booleana en la base de datos.
-
-### 2. Resumen Estadístico por Motivo de Consulta
-- **Agrupación con `Map<String, Integer>`:** Implementación del método `obtenerConteoPorMotivo()` en la capa de datos que utiliza una estructura de mapa clave-valor para contar las citas agrupadamente por categoría/motivo.
-- **Diálogo Interactivo:** En la vista de consultas, el botón **"Resumen por Motivo"** despliega un panel flotante que presenta el conteo actualizado en tiempo real.
-
----
-
-## 🛠️ Instrucciones de Compilación y Ejecución
-
-Para compilar y empaquetar el proyecto con Maven:
-
-```bash
-# Limpiar y compilar el proyecto completo
-mvn clean install
-
-# Ejecutar el módulo de interfaz de usuario
-mvn exec:java -pl agenda-citas-ui -Dexec.mainClass="edu.umg.programacion2.proyecto.ui.main.Main"
-
----
-
 ## 🚀 Características Principales
 
 * **Control de Horarios y Bloques:** Programación en bloques fijos de 1 hora (08:00 a 17:00).
@@ -123,3 +97,29 @@ export DB_PASSWORD="tu_contraseña_mysql"
 1. Asegúrate de tener ejecutando tu servicio de MySQL y haber creado la base de datos con la tabla `citas`.
 2. Configura la variable `DB_PASSWORD` según los pasos descritos.
 3. Ejecuta el proyecto desde el módulo de interfaz de usuario (`agenda-citas-ui`) corriendo la clase principal `MainUI.java`.
+
+---
+
+## 🆕 Nuevas Funcionalidades
+
+### 1. Indicador de Primera Visita (Paciente Nuevo)
+- **Formulario de Registro:** Se integró un `JCheckBox` en `FormularioCitaFrame` que permite marcar si la consulta corresponde a un paciente de primera vez.
+- **Visualización en Tabla:** La vista `TablaConsultasFrame` incluye una nueva columna **"1ra Visita"** que refleja de forma directa (`Sí` / `No`) el tipo de consulta.
+- **Persistencia:** Mapeo completo en la capa DAO (`CitaDAO`) para guardar y actualizar la bandera booleana en la base de datos.
+
+### 2. Resumen Estadístico por Motivo de Consulta
+- **Agrupación con `Map<String, Integer>`:** Implementación del método `obtenerConteoPorMotivo()` en la capa de datos que utiliza una estructura de mapa clave-valor para contar las citas agrupadamente por categoría/motivo.
+- **Diálogo Interactivo:** En la vista de consultas, el botón **"Resumen por Motivo"** despliega un panel flotante que presenta el conteo actualizado en tiempo real.
+
+---
+
+## 🛠️ Instrucciones de Compilación y Ejecución
+
+Para compilar y empaquetar el proyecto con Maven:
+
+```bash
+# Limpiar y compilar el proyecto completo
+mvn clean install
+
+# Ejecutar el módulo de interfaz de usuario
+mvn exec:java -pl agenda-citas-ui -Dexec.mainClass="edu.umg.programacion2.proyecto.ui.main.Main"
