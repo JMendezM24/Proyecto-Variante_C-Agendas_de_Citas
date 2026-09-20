@@ -46,5 +46,22 @@ INSERT INTO citas (nombre_paciente, fecha_cita, hora_cita, hora_fin, sala, motiv
 ('Lucía Méndez', CURRENT_DATE() - INTERVAL 2 DAY, '09:00:00', '10:00:00', 1, 'Consulta no asistida', 'EXPIRADA'),
 ('Fernando Ruiz', CURRENT_DATE() - INTERVAL 3 DAY, '15:00:00', '16:00:00', 3, 'Cita vencida', 'PENDIENTE');
 
+USE agenda_citas_db;
+
+-- 1. Agregar la nueva columna booleana a la tabla existente
+ALTER TABLE citas 
+ADD COLUMN es_primera_visita BOOLEAN DEFAULT FALSE AFTER estado;
+
+-- 2. Actualizar los registros existentes para asignarles valor de primera visita
+-- (Asignamos TRUE a algunas citas de prueba para tener variedad de datos)
+UPDATE citas SET es_primera_visita = TRUE WHERE id IN (1, 3, 5, 8, 10);
+UPDATE citas SET es_primera_visita = FALSE WHERE id NOT IN (1, 3, 5, 8, 10);
+
+-- Verificar la estructura y los datos actualizados
+DESCRIBE citas;
+SELECT id, nombre_paciente, motivo, estado, es_primera_visita FROM citas;
+
 SELECT * FROM citas;
+
+
 
